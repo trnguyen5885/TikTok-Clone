@@ -4,114 +4,234 @@
  *
  * @format
  */
+import React, {useState} from 'react';
+import {StyleSheet, Image, View, Text, TouchableOpacity} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {Provider} from 'react-redux';
+import {useNavigation} from '@react-navigation/native';
+import Feather from 'react-native-vector-icons/Feather';
+import Entypo from 'react-native-vector-icons/Entypo';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Home from './src/screens/Home';
+import Store from './src/screens/Store';
+import Message from './src/screens/Message';
+import Profile from './src/screens/Profile';
+import Video from './src/screens/Video';
+import DetailProduct from './src/secondScreens/Store/DetailProduct';
+import Cart from './src/secondScreens/Store/Cart';
+import BackIcon from './src/assets/SVG/BackIcon';
+import store from './src/redux/store';
+import Chat from './src/secondScreens/Message/Chat';
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+function TabNavigator() {
+  const [backgroundTab, setBackgroundTab] = useState('black');
+  const [tintColorLabelTab, setTintColorLabelTab] = useState('white');
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
+    <Tab.Navigator
+      screenOptions={({route}) => ({
+        headerShown: false,
+        tabBarStyle: {backgroundColor: backgroundTab},
+        tabBarActiveTintColor: tintColorLabelTab,
+      })}>
+      <Tab.Screen
+        name="Home"
+        component={Home}
+        options={{
+          tabBarIcon: ({focused}) => (
+            <Image
+              style={[
+                styles.bottomTabIcon,
+                focused && styles.bottomTabIconActive,
+              ]}
+              source={require('./src/assets/images/home.png')}
+            />
+          ),
+        }}
+        listeners={{
+          tabPress: () => {
+            setBackgroundTab('black');
+            setTintColorLabelTab('white');
           },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
+        }}
+      />
+
+      <Tab.Screen
+        name="Shopping"
+        component={Store}
+        options={{
+          tabBarIcon: ({focused}) => (
+            <Image
+              style={[
+                styles.bottomTabIcon,
+                focused && {tintColor: tintColorLabelTab},
+              ]}
+              source={require('./src/assets/images/store.png')}
+            />
+          ),
+        }}
+        listeners={{
+          tabPress: () => {
+            setBackgroundTab('white');
+            setTintColorLabelTab('black');
           },
-        ]}>
-        {children}
-      </Text>
-    </View>
+        }}
+      />
+
+      <Tab.Screen
+        name="Video"
+        component={Video}
+        options={{
+          tabBarStyle: {display: 'none'},
+          tabBarIcon: () => (
+            <Image
+              style={[styles.newVideoButton]}
+              source={require('./src/assets/images/new-video.png')}
+            />
+          ),
+          tabBarLabel: () => null,
+        }}
+      />
+
+      <Tab.Screen
+        name="Message"
+        component={Message}
+        options={{
+          tabBarIcon: ({focused}) => (
+            <Image
+              style={[
+                styles.bottomTabIcon,
+                focused && {tintColor: tintColorLabelTab},
+              ]}
+              source={require('./src/assets/images/chat.png')}
+            />
+          ),
+        }}
+        listeners={{
+          tabPress: () => {
+            setBackgroundTab('white');
+            setTintColorLabelTab('black');
+          },
+        }}
+      />
+
+      <Tab.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          headerShown: true,
+          headerTitle: 'Trung Nguyên',
+          headerStyle: {height: 105},
+          headerTitleStyle: {fontSize: 19, fontWeight: 700, color: 'black'},
+          headerLeft: () => (
+            <View style={{marginLeft: 10}}>
+              <Ionicons name="chatbox-ellipses-outline" size={26} />
+            </View>
+          ),
+          headerRight: () => (
+            <View style={{marginRight: 10}}>
+              <Ionicons name="menu" size={26} />
+            </View>
+          ),
+          tabBarIcon: ({focused}) => (
+            <Image
+              style={[
+                styles.bottomTabIcon,
+                focused && {tintColor: tintColorLabelTab},
+              ]}
+              source={require('./src/assets/images/user.png')}
+            />
+          ),
+        }}
+        listeners={{
+          tabPress: () => {
+            setBackgroundTab('white');
+            setTintColorLabelTab('black');
+          },
+        }}
+      />
+    </Tab.Navigator>
   );
 }
 
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
+const BackButton = () => {
+  const navigation = useNavigation();
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
+    <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.goBack()}>
+      <BackIcon />
+    </TouchableOpacity>
+  );
+};
+
+function App() {
+  return (
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false,
           }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+          <Stack.Screen name="OverviewTab" component={TabNavigator} />
+          <Stack.Screen name="Detail" component={DetailProduct} />
+          <Stack.Screen
+            name="Cart"
+            component={Cart}
+            options={{
+              headerShown: true,
+              headerTitle: 'Giỏ hàng',
+              headerBackTitleVisible: false,
+              headerBackVisible: false,
+              headerLeft: () => <BackButton />,
+            }}
+          />
+          <Stack.Screen
+            name="Chat"
+            component={Chat}
+            options={{
+              headerShown: true,
+              headerBackVisible: false,
+              headerBackTitleVisible: false,
+              headerLeft: () => <BackButton />,
+              headerRight: () => (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    columnGap: 10,
+                  }}>
+                  <Feather name="flag" color="black" size={25} />
+                  <Entypo
+                    name="dots-three-horizontal"
+                    color="black"
+                    size={20}
+                  />
+                </View>
+              ),
+            }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  bottomTabIcon: {
+    width: 20,
+    height: 20,
+    tintColor: 'grey',
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  bottomTabIconActive: {
+    tintColor: 'white',
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
+  newVideoButton: {
+    width: 54,
+    height: 27,
   },
 });
 

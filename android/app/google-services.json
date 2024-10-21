@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "797714933348",
+    "firebase_url": "https://react-native-courses-f8d67-default-rtdb.firebaseio.com",
+    "project_id": "react-native-courses-f8d67",
+    "storage_bucket": "react-native-courses-f8d67.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:797714933348:android:3b78c91d1eff89c947e171",
+        "android_client_info": {
+          "package_name": "com.tiktok"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "797714933348-cvcdbteag9ea8rkuu2enobc2pt27val4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPVbOMnqKed-fr8VJ9K2-ifB6RLzasj1c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "797714933348-cvcdbteag9ea8rkuu2enobc2pt27val4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
